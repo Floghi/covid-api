@@ -1,7 +1,9 @@
 import argparse
-from sqlalchemy import create_engine, MetaData
+import sys
+import random
+from sqlalchemy import create_engine, MetaData, exc
 from covid_api.helpers import load_config
-from covid_api.db import construct_db_url, detected_cases
+from covid_api.db import construct_db_url, detected_cases, allowed_countries
 
 def init_db(config):
   engine = get_engine(config['admin'])
@@ -37,8 +39,23 @@ def drop_db(config):
     conn.execute("DROP ROLE IF EXISTS %s" % db_user)
 
 def populate_db(config):
-  # TODO
-  print(user_db_config)
+  engine = get_engine(config['user'])
+
+  db_name = config['user']['DB_NAME']
+  max_bigint = sys.maxsize
+  n = 1000
+  with engine.connect() as conn:
+    for i in range(n):
+      national_id = random.randint(0, max_bigint)
+      country = random.choice(allowed_countries).replace("'","''")
+      age = random.randint(0, 99)
+      health = random.choice(['INFECTED', 'TREATED', 'DEAD'])
+
+      try:
+        conn.execute("""INSERT INTO %s (national_id, country, age, health)
+                          VALUES (%i, '%s', %i, '%s')"""% (db_name, national_id, country, age, health))
+      except exc.IntegrityError:
+        pass # ignore if IntegrityError (UniqueViolation) is raised due to idx_national_id_country uniqueness
 
 def create_tables(config):
   engine = get_engine(config['user'])

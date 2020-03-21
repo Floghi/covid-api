@@ -1,4 +1,5 @@
 import enum
+import pycountry
 from sqlalchemy import (
 	MetaData, Table, Column, PrimaryKeyConstraint,
 	BigInteger, Integer, String, Enum, Index
@@ -11,6 +12,7 @@ class Health(enum.Enum):
 	TREATED = 2
 	DEAD = 3
 
+# define the detected_cases table
 detected_cases = Table(
 	'detected_cases', metadata,
 
@@ -24,6 +26,7 @@ Index('idx_national_id_country', detected_cases.c.national_id,
 			detected_cases.c.country, unique=True)
 Index('idx_country', detected_cases.c.country, unique=False)
 
+allowed_countries = list(map(lambda x: x.name,list(pycountry.countries)))
 
 def construct_db_url(config):
 	DSN = "postgresql://{user}:{password}@{host}:{port}/{database}"
@@ -34,3 +37,4 @@ def construct_db_url(config):
 		host=config['DB_HOST'],
 		port=config['DB_PORT'],
 	)
+

@@ -10,6 +10,6 @@ DB_PASS = 'postgres'
 DB_HOST = 'localhost'
 DB_PORT = 5432
 
-DB_NAME = 'covid_api'
+DB_NAME = 'detected_cases'
 DB_USER = 'covid_user'
 DB_PASS = 'covid_pass'
