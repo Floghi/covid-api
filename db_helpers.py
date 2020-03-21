@@ -49,7 +49,7 @@ def populate_db(config):
       national_id = random.randint(0, max_bigint)
       country = random.choice(allowed_countries).replace("'","''")
       age = random.randint(0, 99)
-      health = random.choice(['INFECTED', 'TREATED', 'DEAD'])
+      health = random.choice(['infected', 'treated', 'dead'])
 
       try:
         conn.execute("""INSERT INTO %s (national_id, country, age, health)
