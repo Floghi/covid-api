@@ -9,8 +9,8 @@ A simple API to monitor the progress of the COVID-19 pandemic
 ## Endpoints definition
 
 * add a new case: a person has been detected as infected. The person will be defined by a national identification number, a country, an age, and a state of health.
-* list existing cases: list the last/first X cases, filtering by country will be allowed. 
-* show statistics: list the number of cases by country, the cases will be splitted in three state: 'infected', 'treated' or 'dead'.
+* list existing cases: list the last/first X cases, pagination and filtering by country will be allowed. 
+* show statistics: list the number of cases by country, the cases will be splitted in three state: 'infected', 'treated' or 'dead'. Pagination will be allowed.
 
 ### Formal endpoints specification
 
