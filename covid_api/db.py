@@ -95,7 +95,6 @@ async def list_covid(conn, size, sort, offset=0, country="null"):
 
   :rtype: List[{ national_id: int, country: str, age: int, health: str}]
   """
-  print(type(conn))
   country = country.replace("'","''")
   if country == "null":
     query = """SELECT * FROM detected_cases ORDER BY id %s LIMIT %i OFFSET %i""" % (sort, size, offset)
