@@ -1,5 +1,5 @@
 
-async def test_index(client, db):
+async def test_add_then_list(client, db):
   case = { 'national_id': 1, 'country': 'Belgium', 'age': 54, 'health': 'infected' }
   response = await client.post('/api/add', json=case)
 
