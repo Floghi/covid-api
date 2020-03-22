@@ -2,9 +2,9 @@ from aiohttp import web
 import os
 import pathlib
 
-from db import close_pg, init_pg
-from routes import setup_routes, setup_cors
-from helpers import load_config
+from covid_api.db import close_pg, init_pg
+from covid_api.routes import setup_routes, setup_cors
+from covid_api.helpers import load_config
 
 def init_app():
   app = web.Application()

@@ -25,9 +25,9 @@ A COVID-19 case will be represented and saved in the table *detected_cases* defi
 * *age*: age of the person (integer)
 * *health*: state of health of a person (enum values 'infected', 'treated', 'dead')
 
-We will have a first primary key *id* indexed to speedup the listing of last/first X cases.
+We will first have a primary key *id* indexed to speedup the listing of last/first X cases.
 Then an index on (*national_id*, *country*) with unique constraint to identify a person and speedup the retrieve/update/delete of a given case. 
-Also an index on (*country*, *health*) to speedup the statistics computation.
+And a second index on (*country*, *health*) to speedup the statistics computation.
 
 ## Environment and usage
 
@@ -52,7 +52,7 @@ Once installed and running you can use the *db_helpers.py* script to initialize,
   -p, --populate  Populate the database with random data
 ```
 
-Once initialize you can launch the server with `python covid_api/main.py`
+Once initialize you can launch the server with `python -m covid_api`
 
 ## Future developments
 
