@@ -41,7 +41,7 @@ def construct_db_url(config):
   )
 
 async def init_pg(app):
-  conf = app['db_config']['user']
+  config = app['db_config']['user']
   db_url = construct_db_url(config)
   engine = await aiopg.sa.create_engine(db_url)
   app['db'] = engine
