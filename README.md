@@ -26,5 +26,5 @@ A COVID-19 case will be represented and saved in the table *detected_cases* defi
 * *health*: state of health of a person (enum values 'infected', 'treated', 'dead')
 
 We will have a first primary key *id* indexed to speedup the listing of last/first X cases.
-A second primary key (*national_id*,*country*) indexed to speedup the retrieve/update/delete of a given case. 
-The country column will be indexed to speedup the counting of cases by country.
+Then an index on (*national_id*, *country*) with unique constraint to identify a person and speedup the retrieve/update/delete of a given case. 
+Also an index on (*country*, *health*) to speedup the statistics computation.
