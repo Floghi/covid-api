@@ -3,7 +3,7 @@ import os
 import pathlib
 
 from db import close_pg, init_pg
-from routes import setup_routes
+from routes import setup_routes, setup_cors
 from helpers import load_config
 
 def init_app():
@@ -17,6 +17,7 @@ def init_app():
 
   # setup views and routes
   setup_routes(app)
+  setup_cors(app)
 
   return app
 
