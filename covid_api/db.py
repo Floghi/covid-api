@@ -67,7 +67,9 @@ async def list_covid(conn, size, sort, offset=0, country="null"):
     query = """SELECT * FROM detected_cases ORDER BY id %s LIMIT %i OFFSET %i""" % (sort, size, offset)
   else:
     query = """SELECT * FROM detected_cases WHERE country = '%s' ORDER BY id %s LIMIT %i OFFSET %i""" % (country, sort, size, offset)
-  records = await conn.execute(query)
+  proxy = await conn.execute(query)
+  records = await proxy.fetchall()
+
   response = list(map(lambda r: {'national_id': r[1], 'country': r[2], 'age': r[3], 'health': r[4]}, records)) # serialize
   return response
 

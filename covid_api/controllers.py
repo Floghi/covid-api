@@ -1,5 +1,5 @@
 import db
-from aiohttp.web import Response
+from aiohttp.web import Response, json_response
 
 async def add_covid(request):
   async with request.app['db'].acquire() as conn:
@@ -13,12 +13,13 @@ async def add_covid(request):
 
 async def list_covid(request):
   async with request.app['db'].acquire() as conn:
-    size = int(request.match_info['size'])
-    sort = request.match_info['sort']
-    offset = int(request.match_info['offset'] or 0)
-    country = request.match_info['country'] or 'null'
+    size = int(request.query['size'])
+    sort = request.query['sort']
+    offset = int(request.query.get('offset',0))
+    country = request.query.get('country','null')
     response = await db.list_covid(conn, size, sort, offset, country)
-    return response
+
+    return json_response(response)
 
 async def statistics_covid(request):
   async with request.app['db'].acquire() as conn:
