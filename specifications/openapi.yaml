@@ -86,7 +86,7 @@ paths:
   /statistics:
     get:
       summary: "Statistics on cases by country"
-      description: "List the number of cases by country (descending order), the cases will be splitted in three state: 'infected', 'treated' or 'dead'."
+      description: "List the number of cases by country, the cases will be splitted in three state: 'infected', 'treated' or 'dead'."
       produces:
       - "application/json"
       parameters:
