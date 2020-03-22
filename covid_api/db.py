@@ -5,6 +5,7 @@ from sqlalchemy import (
   MetaData, Table, Column, PrimaryKeyConstraint,
   BigInteger, Integer, String, Enum, Index
 )
+from psycopg2.errors import UniqueViolation
 
 metadata = MetaData()
 
@@ -41,7 +42,7 @@ def construct_db_url(config):
   )
 
 async def init_pg(app):
-  conf = app['db_config']['user']
+  config = app['db_config']['user']
   db_url = construct_db_url(config)
   engine = await aiopg.sa.create_engine(db_url)
   app['db'] = engine
@@ -57,7 +58,7 @@ async def add_covid(conn, national_id, country, age, health):
     await conn.execute("""INSERT INTO detected_cases (national_id, country, age, health)
                             VALUES (%i, '%s', %i, '%s')"""% (national_id, country, age, health))
     return 200
-  except exc.IntegrityError:
+  except UniqueViolation:
     return 422
 
 # List cases of COVID-19
@@ -67,14 +68,17 @@ async def list_covid(conn, size, sort, offset=0, country="null"):
     query = """SELECT * FROM detected_cases ORDER BY id %s LIMIT %i OFFSET %i""" % (sort, size, offset)
   else:
     query = """SELECT * FROM detected_cases WHERE country = '%s' ORDER BY id %s LIMIT %i OFFSET %i""" % (country, sort, size, offset)
-  records = await conn.execute(query)
+  proxy = await conn.execute(query)
+  records = await proxy.fetchall()
+
   response = list(map(lambda r: {'national_id': r[1], 'country': r[2], 'age': r[3], 'health': r[4]}, records)) # serialize
   return response
 
 # Compute statistics of COVID-19
 async def statistics_covid(conn):
   query = "SELECT COUNT(*) as count,country, health FROM detected_cases GROUP BY country,health"
-  records = await conn.execute(query)
+  proxy = await conn.execute(query)
+  records = await proxy.fetchall()
 
   # format the response
   country_hash = {}
