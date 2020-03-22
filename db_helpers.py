@@ -52,8 +52,8 @@ def populate_db(config):
       health = random.choice(['infected', 'treated', 'dead'])
 
       try:
-        conn.execute("""INSERT INTO %s (national_id, country, age, health)
-                          VALUES (%i, '%s', %i, '%s')"""% (db_name, national_id, country, age, health))
+        conn.execute("""INSERT INTO detected_cases (national_id, country, age, health)
+                          VALUES (%i, '%s', %i, '%s')"""% (national_id, country, age, health))
       except exc.IntegrityError:
         pass # ignore if IntegrityError (UniqueViolation) is raised due to idx_national_id_country uniqueness
 
