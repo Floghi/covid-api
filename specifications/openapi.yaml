@@ -119,6 +119,10 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CountryStatistic"
+        422:
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
 definitions:
   Case:
     type: "object"
