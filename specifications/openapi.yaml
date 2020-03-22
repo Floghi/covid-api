@@ -119,14 +119,20 @@ paths:
             type: "array"
             items:
               $ref: "#/definitions/CountryStatistic"
+        422:
+          description: "Invalid input"
+          schema:
+            $ref: "#/definitions/ApiResponse"
 definitions:
   Case:
     type: "object"
+    required: ["national_id", "country", "age", "health"]
     properties:
       national_id:
         type: "integer"
         format: "int64"
         description: "national identification number of a person"
+        minimum: 0
       country:
         type: "string"
         default: "Belgium"
@@ -134,6 +140,7 @@ definitions:
       age:
         type: "integer"
         format: "int32"
+        minimum: 0
       health:
         type: "string"
         enum:
@@ -148,15 +155,19 @@ definitions:
       total:
         type: "integer"
         format: "int32"
+        minimum: 0
       infected:
         type: "integer"
         format: "int32"
+        minimum: 0
       treated:
         type: "integer"
         format: "int32"
+        minimum: 0
       dead:
         type: "integer"
         format: "int32"
+        minimum: 0
   ApiResponse:
     type: "object"
     properties:
