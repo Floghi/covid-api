@@ -54,6 +54,10 @@ Once installed and running you can use the *db_helpers.py* script to initialize,
 
 Once initialize you can launch the server with `python -m covid_api`
 
+## Running tests
+
+`pytest tests`
+
 ## Future developments
 
 Here is a list of potential improvments:
