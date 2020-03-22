@@ -27,5 +27,8 @@ async def list_covid(request):
 
 async def statistics_covid(request):
   async with request.app['db'].acquire() as conn:
-    response = await db.statistics_covid(conn)
+    size = int(request.query['size'])
+    sort = request.query['sort']
+    offset = int(request.query.get('offset',0))
+    response = await db.statistics_covid(conn, size, sort, offset)
     return json_response(response)
