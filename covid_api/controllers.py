@@ -2,9 +2,6 @@ import db
 import json
 from aiohttp.web import Response, json_response
 
-async def options_add_covid(request):
-  return json_response()
-
 async def add_covid(request):
   async with request.app['db'].acquire() as conn:
     body = await request.text()
