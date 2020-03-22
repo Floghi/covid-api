@@ -77,7 +77,8 @@ async def list_covid(conn, size, sort, offset=0, country="null"):
 # Compute statistics of COVID-19
 async def statistics_covid(conn):
   query = "SELECT COUNT(*) as count,country, health FROM detected_cases GROUP BY country,health"
-  records = await conn.execute(query)
+  proxy = await conn.execute(query)
+  records = await proxy.fetchall()
 
   # format the response
   country_hash = {}

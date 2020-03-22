@@ -24,11 +24,11 @@ async def list_covid(request):
     sort = request.query['sort']
     offset = int(request.query.get('offset',0))
     country = request.query.get('country','null')
-    response = await db.list_covid(conn, size, sort, offset, country)
 
+    response = await db.list_covid(conn, size, sort, offset, country)
     return json_response(response)
 
 async def statistics_covid(request):
   async with request.app['db'].acquire() as conn:
-    response = await db.statistics_covid(conn, national_id, country, age, health)
-    return response
+    response = await db.statistics_covid(conn)
+    return json_response(response)
