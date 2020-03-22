@@ -75,7 +75,7 @@ async def list_covid(conn, size, sort, offset=0, country="null"):
   return response
 
 # Compute statistics of COVID-19
-async def statistics_covid(conn):
+async def statistics_covid(conn, size, sort, offset):
   query = "SELECT COUNT(*) as count,country, health FROM detected_cases GROUP BY country,health"
   proxy = await conn.execute(query)
   records = await proxy.fetchall()
@@ -92,4 +92,7 @@ async def statistics_covid(conn):
     value['total'] += count
     country_hash[country] = value
   response = list(country_hash.values())
-  return sorted(response, key=lambda value: -value['total'])
+  if sort == 'asc':
+    return sorted(response, key=lambda value: value['total'])[offset:(offset+size)]
+  else:
+    return sorted(response, key=lambda value: -value['total'])[offset:(offset+size)]
