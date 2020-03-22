@@ -1,15 +1,22 @@
 import db
+import json
 from aiohttp.web import Response, json_response
+
+async def options_add_covid(request):
+  return json_response()
 
 async def add_covid(request):
   async with request.app['db'].acquire() as conn:
-    data = await request.post()
+    body = await request.text()
+    data = json.loads(body)
+
     national_id = data['national_id']
     country = data['country']
     age = data['age']
     health = data['health']
-    await db.add_covid(conn, national_id, country, age, health)
-    return Response()
+
+    code = await db.add_covid(conn, national_id, country, age, health)
+    return json_response(status=code)
 
 async def list_covid(request):
   async with request.app['db'].acquire() as conn:

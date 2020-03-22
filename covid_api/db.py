@@ -5,6 +5,7 @@ from sqlalchemy import (
   MetaData, Table, Column, PrimaryKeyConstraint,
   BigInteger, Integer, String, Enum, Index
 )
+from psycopg2.errors import UniqueViolation
 
 metadata = MetaData()
 
@@ -57,7 +58,7 @@ async def add_covid(conn, national_id, country, age, health):
     await conn.execute("""INSERT INTO detected_cases (national_id, country, age, health)
                             VALUES (%i, '%s', %i, '%s')"""% (national_id, country, age, health))
     return 200
-  except exc.IntegrityError:
+  except UniqueViolation:
     return 422
 
 # List cases of COVID-19
