@@ -6,17 +6,17 @@ from jsonschema.exceptions import ValidationError
 from helpers import load_yaml
 
 async def add_covid(request):
+  body = await request.text()
+  data = json.loads(body)
+
+  try: # validation
+    openapi = load_yaml('specifications/openapi.yaml')
+    schema = openapi['definitions']['Case']
+    validate(instance=data, schema=schema)
+  except ValidationError as e:
+    return json_response({ 'message': e.message}, status=422)
+
   async with request.app['db'].acquire() as conn:
-    body = await request.text()
-    data = json.loads(body)
-
-    try: # validation
-      openapi = load_yaml('specifications/openapi.yaml')
-      schema = openapi['definitions']['Case']
-      validate(instance=data, schema=schema)
-    except ValidationError as e:
-      return json_response({ 'message': e.message}, status=422)
-
     national_id = data['national_id']
     country = data['country']
     age = data['age']
