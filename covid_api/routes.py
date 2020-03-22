@@ -1,7 +1,7 @@
 import pathlib
 
 import aiohttp_cors
-from controllers import add_covid, list_covid, statistics_covid
+from covid_api.controllers import add_covid, list_covid, statistics_covid
 
 def setup_routes(app):
   app.router.add_post('/api/add', add_covid)

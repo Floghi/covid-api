@@ -1,4 +1,4 @@
-from db import allowed_countries
+from covid_api.db import allowed_countries
 # validators
 class ValidationFailed(Exception):
   def __init__(self, message):

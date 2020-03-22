@@ -1,10 +1,10 @@
-import db
 import json
 from aiohttp.web import Response, json_response
 from jsonschema import validate
 from jsonschema.exceptions import ValidationError
-from helpers import load_yaml
-from validator import ValidationFailed, validate_list_input, validate_statistics_input
+from covid_api.helpers import load_yaml
+from covid_api.validator import ValidationFailed, validate_list_input, validate_statistics_input
+from covid_api import db
 
 async def add_covid(request):
   body = await request.text()
