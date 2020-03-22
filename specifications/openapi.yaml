@@ -47,7 +47,7 @@ paths:
         description: "The number of cases to fetch."
         required: true
         type: "integer"
-        default: "0"
+        default: "10"
       - in: "query"
         name: "sort"
         type: "string"
@@ -89,6 +89,29 @@ paths:
       description: "List the number of cases by country (descending order), the cases will be splitted in three state: 'infected', 'treated' or 'dead'."
       produces:
       - "application/json"
+      parameters:
+      - name: "size"
+        in: "query"
+        description: "The number of coutries to fetch."
+        required: true
+        type: "integer"
+        default: "10"
+      - in: "query"
+        name: "sort"
+        type: "string"
+        required: true
+        default: "desc"
+        enum: ["asc", "desc"]
+        description: >
+          Sort order:
+           * `asc` - Ascending, from the least affected country to the most affected country.
+           * `desc` - Descending, from the most affected country to the least affected country.
+      - name: "offset"
+        in: "query"
+        description: "An offset to allow pagination."
+        required: false
+        type: "integer"
+        default: "0"
       responses:
         200:
           description: "successful operation"
