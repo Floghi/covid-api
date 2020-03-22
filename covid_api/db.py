@@ -53,6 +53,21 @@ async def close_pg(app):
 
 # Insert a new case of COVID-19
 async def add_covid(conn, national_id, country, age, health):
+  """Add a new case
+
+  :param conn: The database connection.
+  :type conn: aiopg.sa.connection.SAConnection
+  :param national_id: national identification number of a person
+  :type national_id: int
+  :param country: the country of a person
+  :type country: str
+  :param age: the age of a person
+  :type age: int
+  :param health: the state of health of a person
+  :type health: str
+
+  :rtype: None
+  """
   country = country.replace("'","''")
   try:
     await conn.execute("""INSERT INTO detected_cases (national_id, country, age, health)
@@ -63,6 +78,24 @@ async def add_covid(conn, national_id, country, age, health):
 
 # List cases of COVID-19
 async def list_covid(conn, size, sort, offset=0, country="null"):
+  """List existing cases
+
+  List the last/first SIZE cases.
+
+  :param conn: The database connection.
+  :type conn: aiopg.sa.connection.SAConnection
+  :param size: The number of cases to fetch.
+  :type size: int
+  :param sort: Sort order:  * 'asc' - Ascending, from first cases to last cases.  * 'desc' - Descending, from last cases to first cases.
+  :type sort: str
+  :param offset: An offset to allow pagination.
+  :type offset: int
+  :param country: Filter out the cases by their country (null value will ignore the filter).
+  :type country: str
+
+  :rtype: List[{ national_id: int, country: str, age: int, health: str}]
+  """
+  print(type(conn))
   country = country.replace("'","''")
   if country == "null":
     query = """SELECT * FROM detected_cases ORDER BY id %s LIMIT %i OFFSET %i""" % (sort, size, offset)
@@ -76,6 +109,19 @@ async def list_covid(conn, size, sort, offset=0, country="null"):
 
 # Compute statistics of COVID-19
 async def statistics_covid(conn, size, sort, offset):
+  """Statistics on cases by country
+
+  List the number of cases by country, the cases will be splitted in three state 'infected', 'treated' or 'dead'
+
+  :param size: The number of countries to fetch.
+  :type size: int
+  :param sort: Sort order:  * 'asc' - Ascending, from the least affected country to the most affected country.  * 'desc' - Descending, from the most affected country to the least affected country.
+  :type sort: str
+  :param offset: An offset to allow pagination.
+  :type offset: int
+
+  :rtype: List[{ country: str, total: int, treated: int, infected: int, dead: int}]
+  """
   query = "SELECT COUNT(*) as count,country, health FROM detected_cases GROUP BY country,health"
   proxy = await conn.execute(query)
   records = await proxy.fetchall()
